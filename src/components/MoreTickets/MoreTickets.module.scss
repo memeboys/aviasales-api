@@ -1,0 +1,19 @@
+@import '../../variable.scss';
+.button {
+  font-family: $main-font-family;
+  margin: 20px 0 35px 0;
+  background: #2196F3;
+  border-radius: 5px;
+  padding: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  font-size: $main-font-size;
+  line-height: 20px;
+  color: #FFFFFF;
+  border: none;
+  letter-spacing: 0.5px;
+  width: 100%;
+}
+.button:hover{
+  background: #55a5e6;
+}
