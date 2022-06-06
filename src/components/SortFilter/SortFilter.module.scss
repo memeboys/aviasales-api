@@ -15,8 +15,9 @@
     font-style: normal;
     line-height: 20px;
     color: #4A4A4A;
+    cursor: pointer;
   }
-  button:hover {
+  .selected {
     background: #2196F3;
     color: #FFFFFF;
   }
