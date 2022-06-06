@@ -15,7 +15,7 @@ const filterSlice = createSlice({
         { id: "3", text: "3 пересадки", isChecked: false },
     ],
     sort: {
-      value: 'CHEAPEST',
+      value: null,
     },
   },
   reducers: {
