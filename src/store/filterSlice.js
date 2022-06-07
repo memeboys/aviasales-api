@@ -1,9 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// export const fetchTickets = createAsyncThunk(
-//   'filters/fetchTickets',
-//   async function()
-// );
+export const fetchTickets = createAsyncThunk(
+  'filters/fetchTickets',
+  async function() {
+    try {
+      const response = await fetch(`https://aviasales-test-api.kata.academy/search`);
+      if (!response.ok) {
+        throw new Error('Server Error!');
+      }
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      
+    }
+  }
+);
 
 const filterSlice = createSlice({
   name: "filters",
@@ -17,6 +29,10 @@ const filterSlice = createSlice({
     sort: {
       value: null,
     },
+    searchId: null,
+    tickets: [],
+    stop: false,
+    isLoading: false,
   },
   reducers: {
     toggleAll(filters) {
@@ -32,6 +48,17 @@ const filterSlice = createSlice({
     onSortChange(state, action) {
       state.sort.value = action.payload;
     },
+  },
+  extraReducers: {
+    [fetchTickets.pending] : (state) => {
+      state.isLoading = true;
+    },
+    [fetchTickets.fulfilled] : (state, action) => {
+      state.isLoading = false;
+      state.stop = true;
+      state.searchId = action.payload;
+    },
+    [fetchTickets.rejected] : (state, action) => {},
   },
 });
 
