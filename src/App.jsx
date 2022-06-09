@@ -1,21 +1,21 @@
-import { useEffect } from 'react';
-import { fetchTickets } from './store/filterSlice';
-import { useDispatch } from 'react-redux';
-import Header from './components/Header/Header';
-import TransferFilter from './components/TransferFilter/TransferFilter';
-import SortFilter from './components/SortFilter/SortFilter';
-import TicketsList from './components/TicketsList/TicketsList';
-import MoreTickets from './components/MoreTickets/MoreTickets';
-import classes from './App.module.scss';
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import classes from "./App.module.scss";
+import Header from "./components/Header/Header";
+import MoreTickets from "./components/MoreTickets/MoreTickets";
+import SortFilter from "./components/SortFilter/SortFilter";
+import TicketsList from "./components/TicketsList/TicketsList";
+import TransferFilter from "./components/TransferFilter/TransferFilter";
+import { fetchTickets } from "./store/ticketsSlice";
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchTickets());
-  }, [dispatch]);
+  });
   return (
     <div className={classes.container}>
-	    <Header />
+      <Header />
       <main className={classes.content}>
         <div className={classes.left}>
           <TransferFilter />
@@ -28,6 +28,6 @@ const App = () => {
       </main>
     </div>
   );
-}
+};
 
 export default App;

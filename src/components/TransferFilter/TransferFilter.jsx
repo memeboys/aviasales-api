@@ -14,7 +14,7 @@ const TransferFilter = () => {
           <input
             type="checkbox"
             className={classes.checkbox}
-            checked={!filters.filter.some((filter) => !filter.isChecked)}
+            checked={!filters.some((filter) => !filter.isChecked)}
             onChange={() => dispatch(toggleAll())}
             id="all"
           />
@@ -22,16 +22,18 @@ const TransferFilter = () => {
             <span>Все</span>
           </label>
         </li>
-        {filters.filter.map((filter, index) => (
+        {filters.map((filter, index) => (
           <li className={classes.item} key={index}>
             <input
               type="checkbox"
               className={classes.checkbox}
-              id={filter.id}
+              id={filter.stopCount}
               checked={filter.isChecked}
-              onChange={() => dispatch(toggleSingle({ id: filter.id }))}
+              onChange={() =>
+                dispatch(toggleSingle({ stopCount: filter.stopCount }))
+              }
             />
-            <label htmlFor={filter.id}>
+            <label htmlFor={filter.stopCount}>
               <span>{filter.text}</span>
             </label>
           </li>
