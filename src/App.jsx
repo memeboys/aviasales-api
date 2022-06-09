@@ -13,6 +13,7 @@ const App = () => {
   useEffect(() => {
     dispatch(fetchTickets());
   });
+  
   return (
     <div className={classes.container}>
       <Header />
