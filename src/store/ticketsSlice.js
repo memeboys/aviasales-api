@@ -30,7 +30,7 @@ const ticketsSlice = createSlice({
   },
   reducers: {
     addFiveTickets(state) {
-      state.countTickets += 100;
+      state.countTickets += 5;
     },
   },
   extraReducers: {
