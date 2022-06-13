@@ -32,6 +32,7 @@
           align-items: flex-start;
           padding-bottom: 15px;
           flex-grow: 1;
+          width: 30%;
             .title {
               font-style: normal;
               font-weight: 600;
@@ -50,4 +51,13 @@
         }
       }
     } 
+}
+
+.card:last-child {
+  margin-bottom: 20px;
+}
+@media screen and (max-width: 959px) {
+  .card:first-child {
+    margin-top: 10px;
+  }
 }

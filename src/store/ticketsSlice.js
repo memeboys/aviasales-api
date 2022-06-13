@@ -1,51 +1,53 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-export const fetchTickets = createAsyncThunk(
-  "tickets/fetchTickets",
-  async (_, { getState }) => {
-    let { searchId } = getState().tickets;
-    if (!searchId) {
-      const response = await fetch(
-        `https://aviasales-test-api.kata.academy/search`
-      );
-      if (!response.ok) {
-        throw new Error("Server Error!");
-      }
-      const data = await response.json();
-      searchId = data.searchId;
+async function findTickets(id) {
+  let { data } = await axios.get(`https://aviasales-test-api.kata.academy/tickets?searchId=${id}`);
+  return data;
+}
+
+export const getTickets = createAsyncThunk('tickets/getTickets', async function getTicketsAll() {
+  let { data: searchID } = await axios.get('https://aviasales-test-api.kata.academy/search');
+  let data = await findTickets(searchID.searchId);
+  try {
+    while (!data.stop) {
+      let newData = await findTickets(searchID.searchId);
+      data.tickets.push(...newData.tickets);
+      data.stop = newData.stop;
     }
-    const response = await fetch(
-      `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
-    );
-    if (!response.ok) {
-      throw new Error("Server Error!");
-    }
-    const { tickets, stop } = await response.json();
-    return { tickets, isDone: stop, searchId };
+  } catch (e) {
+    return data.tickets;
   }
-);
+  return data.tickets;
+});
 
 const ticketsSlice = createSlice({
-  name: "tickets",
+  name: 'tickets',
   initialState: {
     tickets: [],
-    searchId: null,
-    isLoading: true,
-    isDone: false,
+    loading: false,
+    countTickets: 5,
+  },
+  reducers: {
+    addFiveTickets(state) {
+      state.countTickets += 100;
+    },
   },
   extraReducers: {
-    // Fetch tickets
-    [fetchTickets.pending]: (state) => {
-      state.isLoading = true;
+    [getTickets.pending]: (state) => {
+      state.loading = true;
     },
-    [fetchTickets.fulfilled]: (state, action) => {
-      if (!action.payload) return;
-      state.isLoading = false;
-      state.searchId = action.payload.searchId;
-      state.isDone = action.payload.isDone;
-      state.tickets.push(...action.payload.tickets);
+    [getTickets.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.tickets.push(...action.payload);
+    },
+    [getTickets.rejected]: (state) => {
+        state.loading = true;
+      }
     },
   },
-});
+);
+
+export const { addFiveTickets } = ticketsSlice.actions;
 
 export default ticketsSlice.reducer;

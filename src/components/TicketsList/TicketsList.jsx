@@ -1,42 +1,9 @@
+import { Spin } from "antd";
+import React from 'react';
 import { useSelector } from "react-redux";
 import { SortType } from "../../store/sortSlice";
 import TickersCard from "../TicketsCard/TicketsCard";
-
-/*
-interface Ticket {
-  // Цена в рублях
-  price: number
-  // Код авиакомпании (iata)
-  carrier: string
-  // Массив перелётов.
-  // В тестовом задании это всегда поиск "туда-обратно" значит состоит из двух элементов
-  segments: [
-    {
-      // Код города (iata)
-      origin: string
-      // Код города (iata)
-      destination: string
-      // Дата и время вылета туда
-      date: string
-      // Массив кодов (iata) городов с пересадками
-      stops: string[]
-      // Общее время перелёта в минутах
-      duration: number
-    },
-    {
-      // Код города (iata)
-      origin: string
-      // Код города (iata)
-      destination: string
-      // Дата и время вылета обратно
-      date: string
-      // Массив кодов (iata) городов с пересадками
-      stops: string[]
-      // Общее время перелёта в минутах
-      duration: number
-    }
-  ]
-}*/
+import classes from './TicketsList.module.scss';
 
 const useTickets = () =>
   useSelector((state) => {
@@ -87,14 +54,20 @@ function sortTickets(tickets, sortType) {
 }
 
 const TicketsList = () => {
+  const countTickets = useSelector((state) => state.tickets.countTickets);
   const tickets = useTickets();
-  console.log(tickets);
-  const elements = tickets.map((ticket, index) => {
+  const filters = useSelector((state) => state.filters);
+  const loader = useSelector((state) => state.tickets.loading)
+  const someOneTrue = filters.some((filter) => filter.isChecked === true);
+  console.log(loader);
+  const elements = tickets.slice(0, countTickets).map((ticket, index) => {
     return <TickersCard ticket={ticket} key={index} />
   })
   return (
-    <div>
-     {elements}
+    <div className={classes.tickets}>
+      {loader ? <Spin size="large" className={classes.spin} /> : null}
+      {someOneTrue ? null : <span className={classes.info}>По заданным фильтрам нет ни одного билета.</span>}
+      {elements}
     </div>
   );
 };
