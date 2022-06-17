@@ -1,8 +1,8 @@
-import { Spin } from "antd";
+import { Spin } from 'antd';
 import React from 'react';
-import { useSelector } from "react-redux";
-import { SortType } from "../../store/sortSlice";
-import TickersCard from "../TicketsCard/TicketsCard";
+import { useSelector } from 'react-redux';
+import { SortType } from '../../store/sortSlice';
+import TickersCard from '../TicketsCard/TicketsCard';
 import classes from './TicketsList.module.scss';
 
 const useTickets = () =>
@@ -26,10 +26,7 @@ function filterTickets(tickets, filters) {
 
 function sortTickets(tickets, sortType) {
   function durationOf(ticket) {
-    return ticket.segments.reduce(
-      (total, segment) => total + segment.duration,
-      0
-    );
+    return ticket.segments.reduce((total, segment) => total + segment.duration, 0);
   }
   function sortByPrice(ticketA, ticketB) {
     return ticketA.price - ticketB.price;
@@ -54,15 +51,14 @@ function sortTickets(tickets, sortType) {
 }
 
 const TicketsList = () => {
-  const countTickets = useSelector((state) => state.tickets.countTickets);
   const tickets = useTickets();
+  const numShowTicket = useSelector((state) => state.tickets.numShowTicket);
   const filters = useSelector((state) => state.filters);
-  const loader = useSelector((state) => state.tickets.loading)
+  const loader = useSelector((state) => state.tickets.loading);
   const someOneTrue = filters.some((filter) => filter.isChecked === true);
-  console.log(loader);
-  const elements = tickets.slice(0, countTickets).map((ticket, index) => {
-    return <TickersCard ticket={ticket} key={index} />
-  })
+  const elements = tickets.slice(0, numShowTicket).map((ticket, index) => {
+    return <TickersCard ticket={ticket} key={index} />;
+  });
   return (
     <div className={classes.tickets}>
       {loader ? <Spin size="large" className={classes.spin} /> : null}

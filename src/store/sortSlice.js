@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const SortType = {
-  CHEAPEST: "CHEAPEST",
-  FASTEST: "FASTEST",
-  OPTIMAL: "OPTIMAL",
+  CHEAPEST: 'CHEAPEST',
+  FASTEST: 'FASTEST',
+  OPTIMAL: 'OPTIMAL',
 };
 
 const sortSlice = createSlice({
-  name: "sort",
+  name: 'sort',
   initialState: SortType.CHEAPEST,
   reducers: {
     sortChange: (_, action) => action.payload,

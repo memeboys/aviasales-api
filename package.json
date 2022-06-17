@@ -20,10 +20,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "prepare": "npx husky install",
+    "start": "npx react-scripts start",
+    "build": "npx react-scripts build",
+    "lint": "npx eslint . --ext .jsx,.js",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "npx prettier ./**/*.{js,jsx,ts,tsx,css,md,json} --write"
   },
   "eslintConfig": {
     "extends": [
@@ -41,6 +43,34 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.18.2",
+    "eslint": "^8.17.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^12.5.0",
+    "prettier": "2.7.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.(js|jsx)": [
+      "npx eslint --fix",
+      "npx prettier --write"
+    ],
+    "*.(css|html|json|md)": [
+      "npx prettier --write"
     ]
   }
 }

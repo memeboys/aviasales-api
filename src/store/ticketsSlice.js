@@ -1,53 +1,83 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import getCookie from '../components/utiles/cookie';
 
-async function findTickets(id) {
-  let { data } = await axios.get(`https://aviasales-test-api.kata.academy/tickets?searchId=${id}`);
-  return data;
-}
-
-export const getTickets = createAsyncThunk('tickets/getTickets', async function getTicketsAll() {
-  let { data: searchID } = await axios.get('https://aviasales-test-api.kata.academy/search');
-  let data = await findTickets(searchID.searchId);
+export const fetchSearchId = createAsyncThunk('tickets/fetchSearchId', async (_, { rejectWithValue }) => {
   try {
-    while (!data.stop) {
-      let newData = await findTickets(searchID.searchId);
-      data.tickets.push(...newData.tickets);
-      data.stop = newData.stop;
+    const res = await fetch('https://aviasales-test-api.kata.academy/search');
+    if (!res.ok) {
+      throw new Error(`${res.status}`);
     }
-  } catch (e) {
-    return data.tickets;
+    return await res.json();
+  } catch (err) {
+    return rejectWithValue(err);
   }
-  return data.tickets;
+});
+
+export const fetchTickets = createAsyncThunk('tickets/fetchTickets', async (_, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${getCookie('searchId')}`);
+    if (!res.ok) {
+      throw new Error(`${res.status}`);
+    }
+    return await res.json();
+  } catch (err) {
+    return rejectWithValue(err.message);
+  }
 });
 
 const ticketsSlice = createSlice({
   name: 'tickets',
   initialState: {
     tickets: [],
+    valueFilterTransfer: [],
+    showAllTickets: true,
+    numShowTicket: 5,
     loading: false,
-    countTickets: 5,
+    error: false,
+    searchId: false,
+    stopFetch: false,
+    fetchStatus500: 0,
   },
   reducers: {
-    addFiveTickets(state) {
-      state.countTickets += 5;
+    showMoreTicket(state) {
+      state.numShowTicket += 5;
     },
   },
   extraReducers: {
-    [getTickets.pending]: (state) => {
+    [fetchSearchId.pending]: (state) => {
       state.loading = true;
+      state.error = false;
     },
-    [getTickets.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.tickets.push(...action.payload);
+    [fetchTickets.pending]: (state) => {
+      state.loading = true;
+      state.error = false;
     },
-    [getTickets.rejected]: (state) => {
-        state.loading = true;
+
+    [fetchSearchId.fulfilled]: (state, action) => {
+      document.cookie = `searchId = ${action.payload.searchId}`;
+      state.searchId = true;
+    },
+    [fetchTickets.fulfilled]: (state, action) => {
+      state.tickets = [...state.tickets, ...action.payload.tickets];
+      state.stopFetch = action.payload.stop;
+      state.loading = !action.payload.stop;
+    },
+
+    [fetchSearchId.rejected]: (state) => {
+      state.error = true;
+    },
+
+    [fetchTickets.rejected]: (state, action) => {
+      if (action.payload === '500') {
+        state.fetchStatus500 += 1;
+      } else {
+        state.loading = false;
+        state.error = true;
       }
     },
   },
-);
+});
 
-export const { addFiveTickets } = ticketsSlice.actions;
+export const { showMoreTicket } = ticketsSlice.actions;
 
 export default ticketsSlice.reducer;

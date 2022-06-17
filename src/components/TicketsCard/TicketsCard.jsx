@@ -3,7 +3,6 @@ import S7Logo from './S7Logo.svg';
 import FlyTo from '../FlyTo/FlyTo';
 import FlyBack from '../FlyBack/FlyBack';
 const TicketsCard = ({ ticket }) => {
-  
   return (
     <div className={classes.card}>
       <div className={classes.header}>
@@ -13,11 +12,11 @@ const TicketsCard = ({ ticket }) => {
         </div>
       </div>
       <div className={classes.body}>
-        <FlyTo info={ticket.segments[0]}/>
-        <FlyBack info={ticket.segments[1]}/>
+        <FlyTo info={ticket.segments[0]} />
+        <FlyBack info={ticket.segments[1]} />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default TicketsCard;

@@ -1,6 +1,6 @@
 import classes from './../TicketsCard/TicketsCard.module.scss';
 
-const FlyBack = ({info}) => {
+const FlyBack = ({ info }) => {
   const getDate = (date, duration) => {
     let dateStart = new Date(date);
     let dateStartString =
@@ -30,8 +30,8 @@ const FlyBack = ({info}) => {
     return strTime;
   };
   const transferCount = (count) => {
-    switch(count) {
-      case 0: 
+    switch (count) {
+      case 0:
         return 'Без пересадок';
       case 1:
         return '1 пересадка';
@@ -39,10 +39,10 @@ const FlyBack = ({info}) => {
         return '2 пересадки';
       case 3:
         return '3 пересадки';
-      default: 
+      default:
         return '';
     }
-  }
+  };
   const transfers = transferCount(info.stops.length);
 
   const stops = info.stops.join(', ');
@@ -50,7 +50,9 @@ const FlyBack = ({info}) => {
   return (
     <div className={classes.container}>
       <div className={classes.info}>
-        <span className={classes.title}>{info.destination} – {info.origin}</span>
+        <span className={classes.title}>
+          {info.destination} – {info.origin}
+        </span>
         <span className={classes.text}>{getDate(info.date, info.duration)}</span>
       </div>
       <div className={classes.info}>
@@ -62,7 +64,7 @@ const FlyBack = ({info}) => {
         <span className={classes.text}>{stops}</span>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default FlyBack;

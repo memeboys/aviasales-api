@@ -1,6 +1,6 @@
-import { useDispatch, useSelector } from "react-redux";
-import { toggleAll, toggleSingle } from "../../store/filterSlice";
-import classes from "./TransferFilter.module.scss";
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleAll, toggleSingle } from '../../store/filterSlice';
+import classes from './TransferFilter.module.scss';
 
 const TransferFilter = () => {
   const filters = useSelector((state) => state.filters);
@@ -29,9 +29,7 @@ const TransferFilter = () => {
               className={classes.checkbox}
               id={filter.stopCount}
               checked={filter.isChecked}
-              onChange={() =>
-                dispatch(toggleSingle({ stopCount: filter.stopCount }))
-              }
+              onChange={() => dispatch(toggleSingle({ stopCount: filter.stopCount }))}
             />
             <label htmlFor={filter.stopCount}>
               <span>{filter.text}</span>
