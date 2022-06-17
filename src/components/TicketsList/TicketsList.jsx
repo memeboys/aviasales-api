@@ -13,12 +13,10 @@ const useTickets = () =>
   });
 
 function filterTickets(tickets, filters) {
-  const preferredStopsCounts = filters // [0, 1, 2, 3]
-    .filter((filter) => filter.isChecked)
-    .map((filter) => filter.stopCount);
+  const preferredStopsCounts = filters.filter((filter) => filter.isChecked).map((filter) => filter.stopCount);
   return tickets.filter((ticket) => {
     return ticket.segments.every((segment) => {
-      const stopCount = segment.stops.length; // 2
+      const stopCount = segment.stops.length;
       return preferredStopsCounts.includes(stopCount);
     });
   });
@@ -49,20 +47,20 @@ function sortTickets(tickets, sortType) {
     default:
   }
 }
-
 const TicketsList = () => {
+  const uniqueKey = () => Date.now() + Math.random() * 10;
   const tickets = useTickets();
   const numShowTicket = useSelector((state) => state.tickets.numShowTicket);
   const filters = useSelector((state) => state.filters);
   const loader = useSelector((state) => state.tickets.loading);
   const someOneTrue = filters.some((filter) => filter.isChecked === true);
-  const elements = tickets.slice(0, numShowTicket).map((ticket, index) => {
-    return <TickersCard ticket={ticket} key={index} />;
+  const elements = tickets.slice(0, numShowTicket).map((ticket) => {
+    return <TickersCard ticket={ticket} key={uniqueKey()} />;
   });
   return (
     <div className={classes.tickets}>
       {loader ? <Spin size="large" className={classes.spin} /> : null}
-      {someOneTrue ? null : <span className={classes.info}>По заданным фильтрам нет ни одного билета.</span>}
+      {someOneTrue ? null : <span className={classes.info}>Рейсов, подходящих под заданные фильтры, не найдено.</span>}
       {elements}
     </div>
   );
